@@ -1,0 +1,17 @@
+﻿  Main.cpp
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(575): warning C4838: conversion from 'double' to 'long' requires a narrowing conversion
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(575): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(583): warning C4838: conversion from 'double' to 'long' requires a narrowing conversion
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(583): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(596): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(597): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(622): warning C4838: conversion from 'double' to 'long' requires a narrowing conversion
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(622): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(685): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(686): warning C4244: '=': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(691): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(692): warning C4244: '=': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\geometryutil.h(1229): warning C4244: '=': conversion from 'double' to 'long', possible loss of data
+c:\users\rodrigo\desktop\poly2d\poly2d\main.cpp(4): warning C4101: 'arc': unreferenced local variable
+  POLY2D.vcxproj -> C:\Users\rodrigo\Desktop\POLY2D\Debug\POLY2D.exe
+  POLY2D.vcxproj -> C:\Users\rodrigo\Desktop\POLY2D\Debug\POLY2D.pdb (Full PDB)
