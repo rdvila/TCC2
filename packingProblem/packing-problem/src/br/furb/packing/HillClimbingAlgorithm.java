@@ -7,7 +7,7 @@ import java.util.Set;
 import br.furb.common.Polygon;
 import br.furb.view.ui.IDataChangeListener;
 
-public class HillClimbingAlgorithm {
+public class HillClimbingAlgorithm  implements PackingAlgorithm{
 
 	private final Random random = new Random();
 
@@ -188,7 +188,7 @@ public class HillClimbingAlgorithm {
 		this.listeners = listeners;
 	}
 
-	protected void notifyListeners(PackingResult result) {
+	public void notifyListeners(PackingResult result) {
 		for (IDataChangeListener listener : listeners) {
 			listener.notifyChanged(result);
 		}
