@@ -30,12 +30,16 @@ public class GeneticAlgorithm implements PackingAlgorithm {
 				
 		Selection selection = new Selection(random, 0.65, fitness);
 		Crossover crossover = new Crossover(random, MAX_POPULATION);
-		Mutation  mutation  = new Mutation(random, 0.01f);
+		Mutation  mutation  = new Mutation(random, 0.3f);
 
 		
 		for (int i=0; stopControl.continueRun(); i+=1) {
 			population = population.newPolulation(selection, crossover, mutation, population, random);
-			bestResult = population.evolve(fitness).result;
+			PackingResult packingResult = population.evolve(fitness).result;
+			 if (packingResult.getHeight() < bestResult.getHeight()) {
+					bestResult = packingResult;
+					notifyListeners(bestResult);
+				}
 			notifyListeners(bestResult);
 			System.out.println(String.format("Population  %d: %d", i, population.size()));
 			System.out.println(String.format("Best Result %f", bestResult.getHeight()));
