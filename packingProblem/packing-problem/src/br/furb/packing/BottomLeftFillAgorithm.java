@@ -28,7 +28,7 @@ public class BottomLeftFillAgorithm {
 
 	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber,
 			double sheetHeight) {
-
+		
 		resolution = sheetHeight * 0.01;
 
 		this.sheetHeight = sheetHeight;
@@ -83,7 +83,7 @@ public class BottomLeftFillAgorithm {
 			}
 			sheetShapeIndex++;
 		}
-
+		
 		return new PackingResult(sheetShapes, maxHeight);
 		// Return Evaluation (total length of packing);
 	}

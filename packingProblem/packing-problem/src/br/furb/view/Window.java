@@ -113,7 +113,7 @@ public class Window extends JFrame implements IDataChangeListener {
 
 		JPanel pnlBusca = new JPanel();
 		JLabel lblBusca = new JLabel("Busca:");
-		cmbBusca = new JComboBox(new Object[] {"Genetic", "Hill Climbing", "Tabu Search"  });
+		cmbBusca = new JComboBox(new Object[] {"Genetic", "Jenetic", "Hill Climbing", "Tabu Search"  });
 		pnlBusca.add(lblBusca);
 		pnlBusca.add(cmbBusca);
 		pnlTool.add(pnlBusca);

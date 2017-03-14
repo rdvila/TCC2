@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import br.furb.common.Polygon;
 import br.furb.packing.genetic.GeneticAlgorithm;
+import br.furb.packing.jenetic.JeneticAlgorithm;
 import br.furb.view.ui.IDataChangeListener;
 
 public class PackingExecutor {
@@ -17,8 +18,10 @@ public class PackingExecutor {
 			algorithm = new HillClimbingAlgorithm();
 		} else if (localSearch == LocalSearch.TABU_SEARCH){
 			algorithm = new TabuSearch();
-		} else {
+		} else if (localSearch == LocalSearch.GENETIC){
 			algorithm = new GeneticAlgorithm();
+		} else {
+			algorithm = new JeneticAlgorithm();
 		}
 
 		algorithm.addLisneter(listeners);
