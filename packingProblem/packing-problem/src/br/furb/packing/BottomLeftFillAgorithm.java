@@ -26,6 +26,12 @@ public class BottomLeftFillAgorithm {
 
 	private Map<Integer, Polygon[]> rotadedPolygonMap;
 
+	private NFPImplementation noFitPolygon;
+	
+	public BottomLeftFillAgorithm(NFPImplementation noFitPolygon) {
+		this.noFitPolygon = noFitPolygon.getnewInstance(); //TODO rever isso
+	}
+	
 	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber,
 			double sheetHeight) {
 		
@@ -201,8 +207,11 @@ public class BottomLeftFillAgorithm {
 		if (noFitPolygonCached == null) {
 			Polygon polygonCopy = polygonMap.get(polygon.getId());
 			Polygon sheetShapeClone = polygonMap.get(sheetShape.getId());
+			
+			if (polygonCopy == null || sheetShapeClone == null) {
+				throw new RuntimeException("=(");
+			}
 
-			NoFitPolygon noFitPolygon = new NoFitPolygon();
 			noFitPolygonCached = noFitPolygon.calculateNotFitPolygon(
 					sheetShapeClone, polygonCopy);
 			noFitPolygonMap.put(polygon.getId(), sheetShape.getId(),

@@ -3,6 +3,7 @@ package br.furb.packing.genetic;
 import java.util.List;
 import java.util.Random;
 
+import br.furb.packing.NFPImplementation;
 import br.furb.packing.PackingResult;
 
 public class Population {
@@ -13,9 +14,9 @@ public class Population {
 		this.chromosomes = chromosomes;
 	}
 
-	Chromosome evolve(Fitness fitness) {
+	Chromosome evolve(NFPImplementation nfp, Fitness fitness) {
 		for (Chromosome c : chromosomes) {
-			c.evolve();
+			c.evolve(nfp);
 		}	
 		return fitness.best(chromosomes);
 	}

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import br.furb.common.Polygon;
 import br.furb.packing.genetic.GeneticAlgorithm;
 import br.furb.packing.jenetic.JeneticAlgorithm;
+import br.furb.packing.jnfp.JNFP;
 import br.furb.view.ui.IDataChangeListener;
 
 public class PackingExecutor {
@@ -27,7 +28,18 @@ public class PackingExecutor {
 		algorithm.addLisneter(listeners);
 
 		Arrays.sort(polygons, new Polygon.HeightComparator());
-		return algorithm.doPacking(polygons, rotations, height, stopCriteria, stopValue);
+		
+		//NFPImplementation nfp = new NoFitPolygon();		
+		NFPImplementation nfp = new JNFP();
+		
+		
+		long start = System.currentTimeMillis();
+		PackingResult result =  algorithm.doPacking(nfp, polygons, rotations, height, stopCriteria, stopValue);
+		long end = System.currentTimeMillis();
+		
+		System.out.println(String.format(">>>> TIME: %dms <<<<", end-start));
+		
+		return result;
 	}
 
 }
