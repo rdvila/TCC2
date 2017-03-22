@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 
 import br.furb.common.Point;
 import br.furb.common.Polygon;
+import br.furb.dataset.DatasetReader;
+import br.furb.dataset.SVGReader;
 import br.furb.dataset.XMLReader;
 
 public class LoadPolygon implements ActionListener {
@@ -44,7 +46,7 @@ public class LoadPolygon implements ActionListener {
 		}
 		panelMain.removeAll();
 
-		XMLReader xmlReader = new XMLReader();
+		DatasetReader xmlReader = new SVGReader();
 
 		polygons = xmlReader.readXML(file);
 		for (int i = 0; i < polygons.length; i++) {

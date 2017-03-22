@@ -16,7 +16,7 @@ import br.furb.common.Point;
 import br.furb.common.Polygon;
 import br.furb.common.PolygonGenerator;
 
-public class XMLReader {
+public class XMLReader implements DatasetReader {
 
 	private double borderX;
 	private double borderY;
