@@ -46,9 +46,16 @@ public class LoadPolygon implements ActionListener {
 		}
 		panelMain.removeAll();
 
-		DatasetReader xmlReader = new SVGReader();
+		DatasetReader xmlReader = new XMLReader();
+		int end = file.length();
+		
+		String ext = String.valueOf(file.charAt(end-3)) + String.valueOf(file.charAt(end-2)) + String.valueOf(file.charAt(end-1));
+		if (ext.equals("svg")) {
+			xmlReader = new SVGReader();
+		}
 
 		polygons = xmlReader.readXML(file);
+		printPolygons(polygons);
 		for (int i = 0; i < polygons.length; i++) {
 			Polygon polygon = polygons[i];
 			PolygonPanel polygonPanel = new PolygonPanel(polygon);
@@ -59,6 +66,17 @@ public class LoadPolygon implements ActionListener {
 
 		listener.notifyLoaded(polygons, xmlReader.getBorderX(), xmlReader.getBorderY());
 		listener2.notifyChanged();
+	}
+
+	private void printPolygons(Polygon[] polygons) {
+		for (Polygon p : polygons) {
+			System.out.println(p.getId());
+			for (Point po : p.getPoints()) {
+				System.out.println(String.format("%f x %f", po.getX(), po.getY()));
+			}
+			System.out.println();
+		}
+		
 	}
 
 	class PolygonPanel extends JPanel {

@@ -242,5 +242,15 @@ public class Polygon implements Cloneable {
 			return false;
 		return true;
 	}
+	
+	public Polygon normalize() {
+		Polygon p = new Polygon(getId());
+		double minx = minX.x * -1.0;
+		double miny = minY.y * -1.0;
+		for (Point po : getPoints()) {
+			p.addPoint(po.getX()+minx, po.getY()+miny);
+		}
+		return p;
+	}
 
 }

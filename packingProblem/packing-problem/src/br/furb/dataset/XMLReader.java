@@ -22,10 +22,12 @@ public class XMLReader implements DatasetReader {
 	private double borderY;
 
 	public double getBorderX() {
+		System.out.println("getBorderX: " + String.valueOf(borderX));
 		return borderX;
 	}
 
 	public double getBorderY() {
+		System.out.println("getBorderY: " + String.valueOf(borderY));
 		return borderY;
 	}
 

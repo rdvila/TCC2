@@ -19,11 +19,6 @@ public class SVGReader implements DatasetReader {
 
 	private double borderX;
 	private double borderY;
-	
-	public SVGReader() {
-		borderX = 50;
-		borderY = 50;
-	}
 
 	@Override
 	public Polygon[] readXML(String filePath) {
@@ -41,6 +36,12 @@ public class SVGReader implements DatasetReader {
 			doc.getDocumentElement().normalize();
 			System.out.println("Root element "
 					+ doc.getDocumentElement().getNodeName());
+			
+			NodeList nodeRoot = doc.getElementsByTagName("svg");
+			Element elementRoot = (Element) nodeRoot.item(0);
+			borderX = Double.valueOf(elementRoot.getAttribute("width").trim()).doubleValue();
+			borderY = Double.valueOf(elementRoot.getAttribute("height").trim()).doubleValue();			
+			
 			NodeList nodeLst = doc.getElementsByTagName("path");
 			System.out.println("Information of all polygons");
 
@@ -51,7 +52,7 @@ public class SVGReader implements DatasetReader {
 				if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element) fstNode;
 
-					polygons.add(toPolygon(element.getAttribute("d").replaceAll("[mz]", ""), s));
+					polygons.add(toPolygon(element.getAttribute("d").replaceAll("[zLZ]", "").trim(), s));
 											
 				}
 
@@ -63,26 +64,67 @@ public class SVGReader implements DatasetReader {
 	}
 
 	private Polygon toPolygon(String d, int id) {
-		Polygon p = new Polygon(id);		
-		String[] paths = d.trim().split(" ");		
+		Polygon p = new Polygon(id);
+		
+		boolean M = d.charAt(0) == 'M';
+		String[] paths = d.replaceAll("[mM]", "").trim().split(" ");
 		double X = 0;
-		double Y = 0;
-		for (int i=0; i<paths.length; i++) {
-			String[] splt = paths[i].split(",");
-			X = Double.valueOf(splt[0]);
-			Y = Double.valueOf(splt[1]);
-			p.addPoint(new Point(X, Y));
+		double Y = 0;		
+		if (M) {
+			for (int i=0; i<paths.length; i++) {
+				
+				if (paths[i] == null || paths[i].trim().length() == 0) {
+					continue;
+				}
+				
+				String[] splt = paths[i].split(",");
+				X = Double.valueOf(splt[0]);
+				Y = Double.valueOf(splt[1]);
+				p.addPoint(new Point(X, Y));
+			}
+		} else {
+			for (int i=0; i<paths.length; i++) {
+				
+				if (paths[i] == null || paths[i].trim().length() == 0) {
+					continue;
+				}
+				
+				String[] splt = paths[i].split(",");
+				X += Double.valueOf(splt[0]);
+				Y += Double.valueOf(splt[1]);
+				p.addPoint(new Point(X, Y));
+			}
 		}
-		return p;
+		return p.normalize();
 	}
 
 	@Override
 	public double getBorderX() {
+		System.out.println("getBorderX: " + String.valueOf(borderX));
 		return borderX;
 	}
 
 	@Override
 	public double getBorderY() {
+		System.out.println("getBorderY: " + String.valueOf(borderY));
 		return borderY;
+	}
+	
+	public static void main(String[] args) {
+		
+		String[] names = {"fu", "poly1a", "poly2b", "poly3b", "poly4b"};
+		String path    = "C:\\Users\\rodrigo\\Desktop\\TCC2\\packingProblem\\packing-problem\\src\\br\\furb\\dataset\\source\\";
+		
+		for (String name: names) {
+			XMLReader reader = new XMLReader();
+			SVGWriter writer = new SVGWriter();
+			Polygon[] polygons = reader.readXML(path+name+".xml");
+			for (Polygon p : polygons) {
+				for (Point po : p.getPoints()) {
+					System.out.println(String.format("%f x %f", po.getX(), po.getY()));
+				}
+			}
+			writer.writeXML(path+name+"-converted.svg", polygons, reader.getBorderX(), reader.getBorderY());
+		}
 	}
 }

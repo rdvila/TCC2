@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 
 import br.furb.common.Point;
@@ -12,15 +13,13 @@ import br.furb.common.Polygon;
 
 public class SVGWriter {
 	
-	String SVG1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"   xmlns:cc=\"http://creativecommons.org/ns#\"   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"   xmlns:svg=\"http://www.w3.org/2000/svg\"   xmlns=\"http://www.w3.org/2000/svg\"    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"%d\" height=\"%d\">\n<g fill=\"none\" stroke=\"black\" stroke-width=\"1\">\n";
-	String PATH = "<path d=\"%s\"/>\n";
+	String SVG1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"   xmlns:cc=\"http://creativecommons.org/ns#\"   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"   xmlns:svg=\"http://www.w3.org/2000/svg\"   xmlns=\"http://www.w3.org/2000/svg\"    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"%d\" height=\"%d\">\n<g>\n";
+	String PATH = "<path style=\"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\" d=\"%s\"/>\n";
 	String SVG2 = "</g>\n</svg>";
 	
-	public void writeXML(String name, Polygon[] polygons) {
-		int width  = 500;
-		int height = 500;
+	public void writeXML(String name, Polygon[] polygons, double width, double height) {
 		try {
-			Files.write(Paths.get(name), String.format(SVG1, width, height).getBytes(), StandardOpenOption.CREATE);
+			Files.write(Paths.get(name), String.format(SVG1, Double.valueOf(width).intValue(), Double.valueOf(height).intValue()).getBytes(), StandardOpenOption.CREATE);
 			
 			for (Polygon p : polygons) {
 				Files.write(Paths.get(name), String.format(PATH, toSVGPath(p)).getBytes(), StandardOpenOption.APPEND);
@@ -35,40 +34,40 @@ public class SVGWriter {
 
 	private String toSVGPath(Polygon p) {
 		
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("m ");
-		double X=0;
-		double Y=0;
-		Formatter formatter = new Formatter(Locale.US);
-		for (Point po : p.getPoints()) {
-			double x = po.getX();
-			double y = po.getY();
-			buffer.append(formatter.format("%f,%f ", x,y));
-			X=po.getX();
-			Y=po.getY();
+		StringBuilder buffer = new StringBuilder();	
+		List<Point> points = p.getPoints(); 
+		Point po = points.get(0);
+		double x = po.getX();
+		double y = po.getY();
+		
+		buffer.append(String.format(Locale.US, "M %f,%f ", x,y));
+		for (int i=1; i<points.size(); i++) {
+			po = points.get(i);
+			x = po.getX();
+			y = po.getY();
+			String formated = String.format(Locale.US, "L%f,%f ", x,y); 
+			buffer.append(formated);
 		}
-		buffer.append("z");
+		buffer.append("Z");	
 		return buffer.toString();
 	}
 	
 	public static void main(String[] args) {
 		
-		String[] names = {"fu", "poly1a", "poly2b", "poly3b", "poly4b"};
-		String path    = "C:\\Users\\rodrigo\\Desktop\\TCC2\\packingProblem\\packing-problem\\src\\br\\furb\\dataset\\source\\";
+		String[] names = {"nest1"};
+		String path    = "C:\\Users\\rodrigo\\Desktop\\";
 		
 		for (String name: names) {
-			XMLReader reader = new XMLReader();
+			SVGReader reader = new SVGReader();
 			SVGWriter writer = new SVGWriter();
-			Polygon[] polygons = reader.readXML(path+name+".xml");
+			Polygon[] polygons = reader.readXML(path+name+".svg");
 			for (Polygon p : polygons) {
 				for (Point po : p.getPoints()) {
-					System.out.println(String.format("%fx%f", po.getX(), po.getY()));
+					System.out.println(String.format("%f x %f", po.getX(), po.getY()));
 				}
 			}
-			writer.writeXML(path+name+".svg", polygons);
+			writer.writeXML(path+name+"-converted.svg", polygons, reader.getBorderX(), reader.getBorderY());
 		}
-		
-		
 	}
 }
 

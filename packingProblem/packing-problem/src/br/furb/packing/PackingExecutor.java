@@ -31,8 +31,8 @@ public class PackingExecutor {
 
 		Arrays.sort(polygons, new Polygon.HeightComparator());
 		
-		//NFPImplementation nfp = new NoFitPolygon();		
-		NFPImplementation nfp = new JNFP();
+		NFPImplementation nfp = new NoFitPolygon();		
+		//NFPImplementation nfp = new JNFP();
 		
 		
 		long start = System.currentTimeMillis();
@@ -40,7 +40,8 @@ public class PackingExecutor {
 		long end = System.currentTimeMillis();
 		
 		System.out.println(String.format(">>>> TIME: %dms <<<<", end-start));
-		
+//		SVGWriter writer = new SVGWriter();
+//		writer.writeXML("C:\\Users\\rodrigo\\Desktop\\result.svg", result.getPacking());
 		return result;
 	}
 	
@@ -56,8 +57,8 @@ public class PackingExecutor {
 		
 		Polygon[] polygons = reader.readXML(args[0]);
 		System.out.println("Reading..."+args[0]);
-		PackingResult result = executor.executePacking(polygons, 100, 1, StopCriteria.getValue("Loop"), 5, LocalSearch.JENETIC);
-		writer.writeXML(args[1], result.getPacking());
+		PackingResult result = executor.executePacking(polygons, 100, 1, StopCriteria.getValue("Loop"), 1, LocalSearch.HILL_CLIMBING);
+		writer.writeXML(args[1], result.getPacking(), result.maxX(), result.maxY());
 		System.out.println("Saving..."+args[1]);
 	}
 
