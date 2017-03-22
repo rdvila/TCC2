@@ -6,6 +6,7 @@ import java.util.Random;
 
 import br.furb.common.Polygon;
 import br.furb.packing.BottomLeftFillAgorithm;
+import br.furb.packing.NFPImplementation;
 import br.furb.packing.PackingResult;
 
 public class Chromosome {
@@ -48,8 +49,8 @@ public class Chromosome {
 		return new Chromosome(copyPolygonsList, rotationsNumber, sheetHeight, random);
 	}
 
-	public void evolve() {
-		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm();
+	public void evolve(NFPImplementation nfp) {
+		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(nfp);
 		this.result = bottomLeftFill.doPacking(polygonsList, rotationsNumber, sheetHeight);
 	}
 

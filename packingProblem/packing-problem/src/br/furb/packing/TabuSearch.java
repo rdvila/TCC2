@@ -11,7 +11,7 @@ public class TabuSearch extends HillClimbingAlgorithm {
 	private TabuList<Polygon> tabuList;
 
 	@Override
-	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
+	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
 			StopCriteria stopCriteria, int stopValue) {
 
 		IStopCriteria stopControl = StopCriteriaControl.getStopCriteria(stopCriteria, stopValue);
@@ -20,7 +20,7 @@ public class TabuSearch extends HillClimbingAlgorithm {
 		PackingResult[] neighbour = new PackingResult[NEIGHBOURHOOD_SIZE];
 		tabuList.add(polygonsList);
 
-		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm();
+		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(nfp);
 		PackingResult packingResult = bottomLeftFill.doPacking(polygonsList, rotationsNumber, sheetHeight);
 		PackingResult bestEvaluation = packingResult;
 		notifyListeners(bestEvaluation);

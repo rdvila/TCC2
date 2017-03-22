@@ -7,7 +7,7 @@ import java.util.Set;
 import br.furb.common.Polygon;
 import br.furb.view.ui.IDataChangeListener;
 
-public class HillClimbingAlgorithm  implements PackingAlgorithm{
+public class HillClimbingAlgorithm  implements PackingAlgorithm {
 
 	private final Random random = new Random();
 
@@ -15,13 +15,13 @@ public class HillClimbingAlgorithm  implements PackingAlgorithm{
 
 	private IDataChangeListener[] listeners;
 
-	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
+	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
 			StopCriteria stopCriteria, int stopValue) {
 
 		IStopCriteria stopControl = StopCriteriaControl.getStopCriteria(stopCriteria, stopValue);
 
 		PackingResult bestResult = null;
-		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm();
+		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(nfp);
 
 		PackingResult packingResult = bottomLeftFill.doPacking(polygonsList, rotationsNumber, sheetHeight);
 		bestResult = packingResult;

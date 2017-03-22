@@ -10,7 +10,7 @@ import br.furb.common.Point;
 import br.furb.common.Polygon;
 import br.furb.common.Transform;
 
-public class NoFitPolygon {
+public class NoFitPolygon extends NFPImplementation {
 
 	private static final boolean DEBUG = false;
 
@@ -403,5 +403,10 @@ public class NoFitPolygon {
 		STATIONARY_EDGE, //
 		EITHER_EDGE, //
 		NONE
+	}
+
+	@Override
+	public NFPImplementation getnewInstance() {
+		return new NoFitPolygon();
 	}
 }

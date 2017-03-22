@@ -11,6 +11,7 @@ import org.jenetics.engine.codecs;
 
 import br.furb.common.Polygon;
 import br.furb.packing.BottomLeftFillAgorithm;
+import br.furb.packing.NFPImplementation;
 import br.furb.packing.PackingAlgorithm;
 import br.furb.packing.PackingResult;
 import br.furb.packing.StopCriteria;
@@ -24,6 +25,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 	static Polygon[] mPolygonsList;
 	static int mRotationsNumber;
 	static double mSheetHeight;
+	static NFPImplementation mNFP;
 	
 	// Calculate the path length of the current genotype.
 	private static PackingResult dist(final int[] permutation) {		
@@ -31,7 +33,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		for (int i=0;i<permutation.length;i++) {
 			polygonsList[i] = mPolygonsList[permutation[i]]; // check limits
 		}
-		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm();
+		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(mNFP);
 		return bottomLeftFill.doPacking(polygonsList, mRotationsNumber, mSheetHeight);
 	}
 
@@ -39,12 +41,13 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 				
 
 	@Override
-	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber, double sheetHeight,
+	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight,
 			StopCriteria stopCriteria, int stopValue) {
 		
 		JeneticAlgorithm.mPolygonsList = polygonsList;
 		JeneticAlgorithm.mRotationsNumber = rotationsNumber;
 		JeneticAlgorithm.mSheetHeight = sheetHeight;
+		JeneticAlgorithm.mNFP = nfp;
 		
 		int ITEMS_LEN = polygonsList.length;
 		int POPULATION_MAX = stopValue;
@@ -98,7 +101,4 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 			listener.notifyChanged(result);
 		}
 	}
-
-
-
 }

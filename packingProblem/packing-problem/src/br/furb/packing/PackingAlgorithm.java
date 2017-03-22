@@ -5,7 +5,7 @@ import br.furb.view.ui.IDataChangeListener;
 
 public interface PackingAlgorithm {
 
-	PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
+	PackingResult doPacking(NFPImplementation nfpImplementation, Polygon[] polygonsList, int rotationsNumber, double sheetHeight, //
 			StopCriteria stopCriteria, int stopValue);
 	
 	void addLisneter(IDataChangeListener[] listeners);
