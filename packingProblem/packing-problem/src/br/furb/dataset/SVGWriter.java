@@ -14,7 +14,7 @@ import br.furb.common.Polygon;
 public class SVGWriter {
 	
 	String SVG1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"   xmlns:cc=\"http://creativecommons.org/ns#\"   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"   xmlns:svg=\"http://www.w3.org/2000/svg\"   xmlns=\"http://www.w3.org/2000/svg\"    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"%d\" height=\"%d\">\n<g>\n";
-	String PATH = "<path style=\"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\" d=\"%s\"/>\n";
+	String PATH = "<path id=\"%s\" style=\"fill:%s;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\" d=\"%s\"/>\n";
 	String SVG2 = "</g>\n</svg>";
 	
 	public void writeXML(String name, Polygon[] polygons, double width, double height) {
@@ -22,16 +22,14 @@ public class SVGWriter {
 			Files.write(Paths.get(name), String.format(SVG1, Double.valueOf(width).intValue(), Double.valueOf(height).intValue()).getBytes(), StandardOpenOption.CREATE);
 			
 			for (Polygon p : polygons) {
-				Files.write(Paths.get(name), String.format(PATH, toSVGPath(p)).getBytes(), StandardOpenOption.APPEND);
+				Files.write(Paths.get(name), String.format(PATH, "path"+String.valueOf(p.getId()), p.color(), toSVGPath(p)).getBytes(), StandardOpenOption.APPEND);
 			}
 			
 			Files.write(Paths.get(name), SVG2.getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
-
 	private String toSVGPath(Polygon p) {
 		
 		StringBuilder buffer = new StringBuilder();	
@@ -40,21 +38,22 @@ public class SVGWriter {
 		double x = po.getX();
 		double y = po.getY();
 		
-		buffer.append(String.format(Locale.US, "M %f,%f ", x,y));
+		buffer.append(String.format(Locale.US, "m %f,%f ", x,y));
 		for (int i=1; i<points.size(); i++) {
+			Point pl = points.get(i-1);
 			po = points.get(i);
-			x = po.getX();
-			y = po.getY();
-			String formated = String.format(Locale.US, "L%f,%f ", x,y); 
+			x = po.getX() - pl.getX();
+			y = po.getY() - pl.getY();
+			String formated = String.format(Locale.US, "%f,%f ", x,y); 
 			buffer.append(formated);
 		}
-		buffer.append("Z");	
+		buffer.append("z");	
 		return buffer.toString();
 	}
 	
 	public static void main(String[] args) {
 		
-		String[] names = {"nest1"};
+		String[] names = {"nest4"};
 		String path    = "C:\\Users\\rodrigo\\Desktop\\";
 		
 		for (String name: names) {

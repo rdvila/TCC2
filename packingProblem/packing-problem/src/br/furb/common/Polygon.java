@@ -7,6 +7,10 @@ import java.util.List;
 public class Polygon implements Cloneable {
 
 	private final List<Point> points;
+	
+	private int r=0;
+	private int g=0;
+	private int b=0;
 
 	private Point prior;
 
@@ -88,6 +92,11 @@ public class Polygon implements Cloneable {
 	}
 
 	public void addPoint(double x, double y) {
+		
+		r = Double.valueOf((r + x)).intValue() % 256;
+		g = Double.valueOf((g + y)).intValue() % 256;
+		b = Double.valueOf((b + x + y)).intValue() % 256;
+		
 		Point point = new Point(x, y);
 
 		if (first == null) {
@@ -250,7 +259,16 @@ public class Polygon implements Cloneable {
 		for (Point po : getPoints()) {
 			p.addPoint(po.getX()+minx, po.getY()+miny);
 		}
+		
+		if (MathHelper.compareDouble(getWidth(), p.getWidth(), 0.1) != 0 || MathHelper.compareDouble(getHeight(), p.getHeight(), 0.1) != 0) {
+			throw new RuntimeException("Error: polygon with diferent bound box");
+		}
+		
 		return p;
+	}
+	
+	public String color() {
+		return String.format("#%02X%02X%02X", r,g,b);
 	}
 
 }
