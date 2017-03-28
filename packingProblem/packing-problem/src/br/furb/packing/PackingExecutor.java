@@ -9,6 +9,7 @@ import br.furb.dataset.SVGWriter;
 import br.furb.packing.genetic.GeneticAlgorithm;
 import br.furb.packing.jenetic.JeneticAlgorithm;
 import br.furb.packing.jnfp.JNFP;
+import br.furb.packing.jnfp.JNFPWithCache;
 import br.furb.view.ui.IDataChangeListener;
 
 public class PackingExecutor {
@@ -50,7 +51,7 @@ public class PackingExecutor {
 
 	public static void main(String[] args) {
 
-		String[] names = { "nest4-converted" };
+		String[] names = { "nest5-converted" };
 		String path = "C:\\Users\\rodrigo\\Desktop\\";
 
 		for (String name : names) {
@@ -60,7 +61,7 @@ public class PackingExecutor {
 			SVGWriter writer = new SVGWriter();
 
 			Polygon[] polygons = reader.readXML(path + name + ".svg");
-			PackingResult result = executor.executePacking(polygons, 500, 1, StopCriteria.getValue("Loop"), 1,
+			PackingResult result = executor.executePacking(polygons, 1000, 1, StopCriteria.getValue("Loop"), 1,
 					LocalSearch.HILL_CLIMBING);
 			writer.writeXML(path + name + "-result.svg", result.getPacking(), result.maxX(), result.maxY());
 			System.out.println("height: " +result.getHeight());

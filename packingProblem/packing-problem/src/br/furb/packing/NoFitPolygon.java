@@ -9,6 +9,7 @@ import br.furb.common.MathHelper;
 import br.furb.common.Point;
 import br.furb.common.Polygon;
 import br.furb.common.Transform;
+import br.furb.packing.jnfp.NFPCache;
 
 public class NoFitPolygon extends NFPImplementation {
 

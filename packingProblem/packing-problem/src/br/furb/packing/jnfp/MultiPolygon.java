@@ -1411,4 +1411,31 @@ public class MultiPolygon {
 		
 		createEdges();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		MultiPolygon other = (MultiPolygon) obj;
+		Coordinate[] otherOuterPolygon = other.getOuterPolygon();
+		
+		if (otherOuterPolygon.length != outerPolygon.length) {
+			return false;
+		}
+		
+		boolean isEquals = true;
+		for (int i=0; i<outerPolygon.length; i++) {
+			isEquals = isEquals && otherOuterPolygon[i].equals(outerPolygon[i]);
+			if (isEquals == false) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
