@@ -40,9 +40,8 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 	private IDataChangeListener[] listeners;
 				
 
-	@Override
 	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight,
-			StopCriteria stopCriteria, int stopValue) {
+			StopCriteria stopCriteria, int stopValue, int populationSize) {
 		
 		JeneticAlgorithm.mPolygonsList = polygonsList;
 		JeneticAlgorithm.mRotationsNumber = rotationsNumber;
@@ -50,8 +49,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		JeneticAlgorithm.mNFP = nfp;
 		
 		int ITEMS_LEN = polygonsList.length;
-		int POPULATION_MAX = stopValue;
-		int POPULATION_SIZE = 50;
+		int GENERATIONS = stopValue;
 		
 		final Engine<EnumGene<Integer>, PackingResult> engine = Engine
 				.builder(
@@ -59,7 +57,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 					codecs.ofPermutation(ITEMS_LEN))
 				.optimize(Optimize.MINIMUM)
 				.maximalPhenotypeAge(11)
-				.populationSize(POPULATION_SIZE)
+				.populationSize(populationSize)
 				.alterers(
 					new SwapMutator<>(0.2),
 					new PartiallyMatchedCrossover<>(0.35))
@@ -76,7 +74,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 				.limit(bySteadyFitness(15))
 				// The evolution will stop after maximal 100
 				// generations.
-				.limit(POPULATION_MAX)
+				.limit(GENERATIONS)
 				// Update the evaluation statistics after
 				// each generation
 				.peek(statistics)
@@ -86,7 +84,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 
 			System.out.println(statistics);
 			System.out.println(best.getFitness().getHeight());
-			notifyListeners(best.getFitness());
+			//notifyListeners(best.getFitness());
 		
 		
 		return best.getFitness();
@@ -100,5 +98,12 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		for (IDataChangeListener listener : listeners) {
 			listener.notifyChanged(result);
 		}
+	}
+
+	@Override
+	public PackingResult doPacking(NFPImplementation nfpImplementation, Polygon[] polygonsList, int rotationsNumber,
+			double sheetHeight, StopCriteria stopCriteria, int stopValue) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

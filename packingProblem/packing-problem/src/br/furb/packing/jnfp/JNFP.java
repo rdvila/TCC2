@@ -11,6 +11,9 @@ import br.furb.packing.NFPImplementation;
 public class JNFP extends NFPImplementation {
 
 	public Polygon calculateNotFitPolygon(Polygon polygonA, Polygon polygonB) {
+		
+		polygonA = polygonA.normalize();
+		polygonB = polygonB.normalize();
 
 		List<Double> xListA = new ArrayList<>();
 		List<Double> yListA = new ArrayList<>();

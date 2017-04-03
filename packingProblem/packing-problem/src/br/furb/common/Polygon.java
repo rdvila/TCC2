@@ -86,7 +86,7 @@ public class Polygon implements Cloneable {
 	public List<Point> getPoints() {
 		return points;
 	}
-
+	
 	public Point getFirst() {
 		return first;
 	}
@@ -252,6 +252,7 @@ public class Polygon implements Cloneable {
 		return true;
 	}
 	
+	
 	public Polygon normalize() {
 		Polygon p = new Polygon(getId());
 		double minx = minX.x * -1.0;
@@ -263,7 +264,6 @@ public class Polygon implements Cloneable {
 		if (MathHelper.compareDouble(getWidth(), p.getWidth(), 0.1) != 0 || MathHelper.compareDouble(getHeight(), p.getHeight(), 0.1) != 0) {
 			throw new RuntimeException("Error: polygon with diferent bound box");
 		}
-		
 		return p;
 	}
 	
