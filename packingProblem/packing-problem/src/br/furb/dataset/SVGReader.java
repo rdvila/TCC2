@@ -112,8 +112,33 @@ public class SVGReader implements DatasetReader {
 	
 	public static void main(String[] args) {
 		
-		String[] names = {"fu", "poly1a", "poly2b", "poly3b", "poly4b"};
-		String path    = "C:\\Users\\rodrigo\\Desktop\\TCC2\\packingProblem\\packing-problem\\src\\br\\furb\\dataset\\source\\";
+		String[] names = {
+				"albano",
+				"blaz",
+				"dagli",
+				"dighe1",
+				"dighe2",
+				"fu",
+				"han",
+				"jakobs1",
+				"jakobs2",
+				"mao",
+				"marques",
+				"poly1a",
+				"poly2a",
+				"poly2b",
+				"poly3a",
+				"poly3b",
+				"poly4a",
+				"poly4b",
+				"poly5a",
+				"poly5b",
+				"shapes0",
+				"shapes1",
+				"shirts",
+				"swim",
+				"trousers"};
+		String path    = "C:\\Users\\rodrigo\\Desktop\\TCC2\\tests\\teste5\\";
 		
 		for (String name: names) {
 			XMLReader reader = new XMLReader();
