@@ -2,13 +2,10 @@ package br.furb.packing;
 
 import java.util.Arrays;
 
-import br.furb.common.Point;
 import br.furb.common.Polygon;
 import br.furb.dataset.SVGReader;
 import br.furb.dataset.SVGWriter;
-import br.furb.packing.genetic.GeneticAlgorithm;
 import br.furb.packing.jenetic.JeneticAlgorithm;
-import br.furb.packing.jnfp.JNFP;
 import br.furb.packing.jnfp.JNFPWithCache;
 import br.furb.view.ui.IDataChangeListener;
 
@@ -23,8 +20,6 @@ public class PackingExecutor {
 			algorithm = new HillClimbingAlgorithm();
 		} else if (localSearch == LocalSearch.TABU_SEARCH) {
 			algorithm = new TabuSearch();
-		} else if (localSearch == LocalSearch.GENETIC) {
-			algorithm = new GeneticAlgorithm();
 		} else {
 			algorithm = new JeneticAlgorithm();
 		}
@@ -34,7 +29,7 @@ public class PackingExecutor {
 		Arrays.sort(polygons, new Polygon.HeightComparator());
 
 		// NFPImplementation nfp = new NoFitPolygon();
-		NFPImplementation nfp = new JNFP();
+		NFPImplementation nfp = new JNFPWithCache();
 
 		long start = System.currentTimeMillis();
 		
@@ -52,7 +47,7 @@ public class PackingExecutor {
 	public static void main(String[] args) {
 
 		String[] names = { "nest5-converted" };
-		String path = "C:\\Users\\rodrigo\\Desktop\\";
+		String path = "C:\\Users\\rodrigo\\Desktop\\TCC2\\tests\\";
 
 		for (String name : names) {
 
@@ -61,8 +56,8 @@ public class PackingExecutor {
 			SVGWriter writer = new SVGWriter();
 
 			Polygon[] polygons = reader.readXML(path + name + ".svg");
-			PackingResult result = executor.executePacking(polygons, 1000, 1, StopCriteria.getValue("Loop"), 1,
-					LocalSearch.HILL_CLIMBING);
+			PackingResult result = executor.executePacking(polygons, 1000, 1, StopCriteria.getValue("Loop"), 2,
+					LocalSearch.JENETIC);
 			writer.writeXML(path + name + "-result.svg", result.getPacking(), result.maxX(), result.maxY());
 			System.out.println("height: " +result.getHeight());
 		}
