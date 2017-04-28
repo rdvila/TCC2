@@ -373,7 +373,7 @@ public class TouchingEdgePair {
 	protected boolean isFeasibleVectorWithRounding(Vector vector) {
 		
 		// test all possible ranges
-		double vectorAngle = vector.getVectorAngle();		
+		double vectorAngle = vector.getVectorAngle();
 		
 		if (startAngle-angleRound <= vectorAngle && vectorAngle <= endAngle+angleRound)
 			return true;

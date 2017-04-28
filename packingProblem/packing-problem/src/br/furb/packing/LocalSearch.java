@@ -4,7 +4,6 @@ public enum LocalSearch {
 
 	HILL_CLIMBING, //
 	TABU_SEARCH,
-	GENETIC,
 	JENETIC;
 
 	public static LocalSearch getValue(String value) {
@@ -12,8 +11,6 @@ public enum LocalSearch {
 			return HILL_CLIMBING;
 		} else if ("Tabu Search".equals(value)) {
 			return TABU_SEARCH;
-		} else if ("Genetic".equals(value)) {
-				return GENETIC;
 		} else if ("Jenetic".equals(value)) {
 			return JENETIC;
 		} else {

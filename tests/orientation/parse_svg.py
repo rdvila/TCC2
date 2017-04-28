@@ -36,8 +36,8 @@ for p in paths:
 	new_path = Path()
 	path     = parse_path(p.attrib["d"])
 	start    = None
-	for px in list(frange(0, 1, decimal.Decimal('0.05'))):
-	#for px in list(frange(0, 1, decimal.Decimal('0.005'))):
+	#for px in list(frange(0, 1, decimal.Decimal('0.05'))):
+	for px in list(frange(0, 1, decimal.Decimal('0.005'))):
 		if start is None:
 			start = path.point(float(px))
 			print(start)

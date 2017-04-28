@@ -7,6 +7,7 @@ import org.jenetics.Phenotype;
 import org.jenetics.SwapMutator;
 import org.jenetics.engine.Engine;
 import org.jenetics.engine.EvolutionStatistics;
+import org.jenetics.engine.EvolutionStream;
 import org.jenetics.engine.codecs;
 
 import br.furb.common.Polygon;
@@ -18,6 +19,11 @@ import br.furb.packing.StopCriteria;
 import br.furb.view.ui.IDataChangeListener;
 
 import static org.jenetics.engine.limit.bySteadyFitness;
+import static org.jenetics.engine.limit.byExecutionTime;
+
+import java.time.Clock;
+import java.time.Duration;
+
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class JeneticAlgorithm implements PackingAlgorithm {
@@ -40,8 +46,8 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 	private IDataChangeListener[] listeners;
 				
 
-	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight,
-			StopCriteria stopCriteria, int stopValue, int populationSize) {
+	public PackingResult doPackingCustom(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber, double sheetHeight,
+			int generations, int populationSize, int time) {
 		
 		JeneticAlgorithm.mPolygonsList = polygonsList;
 		JeneticAlgorithm.mRotationsNumber = rotationsNumber;
@@ -49,7 +55,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		JeneticAlgorithm.mNFP = nfp;
 		
 		int ITEMS_LEN = polygonsList.length;
-		int GENERATIONS = stopValue;
+		int GENERATIONS = generations;
 		
 		final Engine<EnumGene<Integer>, PackingResult> engine = Engine
 				.builder(
@@ -64,28 +70,30 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 				.build();
 
 			// Create evolution statistics consumer.
-			final EvolutionStatistics<PackingResult, ?>
-				statistics = EvolutionStatistics.ofComparable();
-
-			final Phenotype<EnumGene<Integer>, PackingResult> best =
-				engine.stream()
-				// Truncate the evolution stream after 7 "steady"
-				// generations.
-				.limit(bySteadyFitness(15))
-				// The evolution will stop after maximal 100
-				// generations.
-				.limit(GENERATIONS)
-				// Update the evaluation statistics after
-				// each generation
-				.peek(statistics)
-				// Collect (reduce) the evolution stream to
-				// its best phenotype.
-				.collect(toBestPhenotype());
+			final ByPassStatistic<PackingResult, ?>
+				statistics = new ByPassStatistic<>(this);
+			
+			Phenotype<EnumGene<Integer>, PackingResult> best 
+			=
+						engine.stream()
+						// Truncate the evolution stream after 7 "steady"
+						// generations.
+						.limit(bySteadyFitness(15))
+						// The evolution will stop after maximal 100
+						// generations.
+						.limit(byExecutionTime(Duration.ofMillis(time), Clock.systemUTC()))
+						.limit(GENERATIONS)
+						// Update the evaluation statistics after
+						// each generation
+						.peek(statistics)
+						// Collect (reduce) the evolution stream to
+						// its best phenotype.
+						.collect(toBestPhenotype());
+						
 
 			System.out.println(statistics);
 			System.out.println(best.getFitness().getHeight());
-			//notifyListeners(best.getFitness());
-		
+					
 		
 		return best.getFitness();
 	}
@@ -96,14 +104,24 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 
 	public void notifyListeners(PackingResult result) {
 		for (IDataChangeListener listener : listeners) {
-			listener.notifyChanged(result);
+			if (listener != null) {
+				listener.notifyChanged(result);
+			}
 		}
 	}
 
 	@Override
-	public PackingResult doPacking(NFPImplementation nfpImplementation, Polygon[] polygonsList, int rotationsNumber,
+	public PackingResult doPacking(NFPImplementation nfp, Polygon[] polygonsList, int rotationsNumber,
 			double sheetHeight, StopCriteria stopCriteria, int stopValue) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		final int DEFAULT_POPULATION_SIZE = 100;		
+
+			if (stopCriteria.equals(stopCriteria.LOOP)) {
+				return doPackingCustom(nfp, polygonsList, rotationsNumber, sheetHeight, stopValue, DEFAULT_POPULATION_SIZE, 1200000);
+			} else {
+				return doPackingCustom(nfp, polygonsList, rotationsNumber, sheetHeight, 9999, DEFAULT_POPULATION_SIZE, stopValue);			
+			}				
+		
+
 	}
 }

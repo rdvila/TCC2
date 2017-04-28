@@ -6,7 +6,6 @@ import br.furb.common.Polygon;
 import br.furb.dataset.SVGReader;
 import br.furb.dataset.SVGWriter;
 import br.furb.packing.jenetic.JeneticAlgorithm;
-import br.furb.packing.jnfp.JNFPWithCache;
 import br.furb.view.ui.IDataChangeListener;
 
 public class PackingExecutor {
@@ -28,19 +27,13 @@ public class PackingExecutor {
 
 		Arrays.sort(polygons, new Polygon.HeightComparator());
 
-		// NFPImplementation nfp = new NoFitPolygon();
-		NFPImplementation nfp = new JNFPWithCache();
-
+		NFPImplementation nfp = new NoFitPolygon();
+		
 		long start = System.currentTimeMillis();
-		
 		PackingResult result = algorithm.doPacking(nfp, polygons, rotations, height, stopCriteria, stopValue);
-		
 		long end = System.currentTimeMillis();
-
 		System.out.println(String.format(">>>> TIME: %dms <<<<", end - start));
-		// SVGWriter writer = new SVGWriter();
-		// writer.writeXML("C:\\Users\\rodrigo\\Desktop\\result.svg",
-		// result.getPacking());
+		
 		return result;
 	}
 
