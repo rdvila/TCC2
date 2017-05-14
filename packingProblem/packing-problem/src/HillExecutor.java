@@ -55,7 +55,7 @@ public class HillExecutor {
 		
 		long total = end - start;
 		
-		String outname = input + "-" + pheight + "-" + protations + "-" + time;
+		String outname = input + "-hill-" + pheight + "-" + protations + "-" + time;
 		writer.writeXML(outname + "-result.svg", result.getPacking(), result.maxX(), result.maxY());
 		
 		String resultTable = input + "," +  pheight + "," + protations + "," + time + "," + result.maxX() + "," + result.maxY() + "," + result.getHeight() + "," + total;

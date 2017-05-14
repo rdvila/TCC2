@@ -189,8 +189,9 @@ public class HillClimbingAlgorithm  implements PackingAlgorithm {
 	}
 
 	public void notifyListeners(PackingResult result) {
-		for (IDataChangeListener listener : listeners) {
-			listener.notifyChanged(result);
-		}
+		System.out.println(result.getHeight());
+//		for (IDataChangeListener listener : listeners) {
+//			listener.notifyChanged(result);
+//		}
 	}
 }

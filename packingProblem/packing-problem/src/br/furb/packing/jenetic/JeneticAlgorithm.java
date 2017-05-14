@@ -10,6 +10,8 @@ import org.jenetics.engine.EvolutionStatistics;
 import org.jenetics.engine.EvolutionStream;
 import org.jenetics.engine.codecs;
 
+import com.oracle.webservices.internal.api.message.PropertySet.Property;
+
 import br.furb.common.Polygon;
 import br.furb.packing.BottomLeftFillAgorithm;
 import br.furb.packing.NFPImplementation;
@@ -57,16 +59,39 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		int ITEMS_LEN = polygonsList.length;
 		int GENERATIONS = generations;
 		
+		int maxPhenenonAge = (int) (GENERATIONS * 0.2);
+		double swapMutatorFactor = 0.2;
+		double crossoverFactor = 0.35;
+		
+		boolean hasMaxPhenenonAge = System.getProperty( "maxPhenenonAge" ) != null;
+		boolean hasSwapMutatorFactor = System.getProperty( "swapMutatorFactor" ) != null;
+		boolean hasCrossoverFactor = System.getProperty( "crossoverFactor" ) != null;
+		
+		if (hasMaxPhenenonAge) {
+			maxPhenenonAge = Integer.parseInt(System.getProperty("maxPhenenonAge"));
+			System.out.println("maxPhenenonAge changed to: " + String.valueOf(maxPhenenonAge));
+		}
+		
+		if (hasSwapMutatorFactor) {
+			swapMutatorFactor = Double.parseDouble(System.getProperty("swapMutatorFactor"));
+			System.out.println("swapMutatorFactor changed to: " + String.valueOf(swapMutatorFactor));
+		}
+		
+		if (hasCrossoverFactor) {
+			crossoverFactor = Double.parseDouble(System.getProperty("crossoverFactor"));
+			System.out.println("crossoverFactor changed to: " + String.valueOf(crossoverFactor));
+		}		
+		
 		final Engine<EnumGene<Integer>, PackingResult> engine = Engine
 				.builder(
 						JeneticAlgorithm::dist,
 					codecs.ofPermutation(ITEMS_LEN))
 				.optimize(Optimize.MINIMUM)
-				.maximalPhenotypeAge(11)
+				.maximalPhenotypeAge(maxPhenenonAge)
 				.populationSize(populationSize)
 				.alterers(
-					new SwapMutator<>(0.2),
-					new PartiallyMatchedCrossover<>(0.35))
+					new SwapMutator<>(swapMutatorFactor),
+					new PartiallyMatchedCrossover<>(crossoverFactor))
 				.build();
 
 			// Create evolution statistics consumer.
@@ -103,11 +128,11 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 	}
 
 	public void notifyListeners(PackingResult result) {
-		for (IDataChangeListener listener : listeners) {
-			if (listener != null) {
-				listener.notifyChanged(result);
-			}
-		}
+//		for (IDataChangeListener listener : listeners) {
+//			if (listener != null) {
+//				listener.notifyChanged(result);
+//			}
+//		}
 	}
 
 	@Override

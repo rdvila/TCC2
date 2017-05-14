@@ -66,14 +66,20 @@ public class TabuSearch extends HillClimbingAlgorithm {
 	}
 
 	private Polygon[] generateNotTabuNeighbour(Polygon[] polygonsList, EnOpt opt) {
-		Polygon[] generatedNeighbour;
-
-		do {
+		Polygon[] generatedNeighbour = null;
+		int tries = 0;
+		for (tries=0; tries<10; tries++) {
 			generatedNeighbour = generateNeighbour(opt, polygonsList);
-		} while (tabuList.contains(generatedNeighbour));
-
-		tabuList.add(generatedNeighbour);
-
+			if (!tabuList.contains(generatedNeighbour)) {
+				tabuList.add(generatedNeighbour);
+				break;
+			}
+		}
+		
+		if (tries >= 10) {
+			System.out.println("Max tries reached!!!");
+		}
+		
 		return generatedNeighbour;
 	}
 

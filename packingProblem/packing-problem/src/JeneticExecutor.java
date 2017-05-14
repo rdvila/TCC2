@@ -56,7 +56,7 @@ public class JeneticExecutor {
 		
 		long total = end - start;
 		
-		String outname = input + "-" + pheight + "-" + protations + "-" + ploops + "-" + popSize;
+		String outname = input + "-" + pheight + "-" + protations + "-" + ploops + "-" + popSize + "-" + pTime;
 		writer.writeXML(outname + "-result.svg", result.getPacking(), result.maxX(), result.maxY());
 		
 		String resultTable = input + "," +  pheight + "," + protations + "," + ploops + "," + result.maxX() + "," + result.maxY() + ","  + popSize + "," + result.getHeight() + "," + total;

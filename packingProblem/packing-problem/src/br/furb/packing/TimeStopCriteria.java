@@ -13,6 +13,9 @@ public class TimeStopCriteria implements IStopCriteria {
 
 	@Override
 	public boolean continueRun() {
+		System.out.println((System.currentTimeMillis() - currentMillis));
+		System.out.println(stopValue);
+		System.out.println((System.currentTimeMillis() - currentMillis) < stopValue);
 		return (System.currentTimeMillis() - currentMillis) < stopValue;
 	}
 
