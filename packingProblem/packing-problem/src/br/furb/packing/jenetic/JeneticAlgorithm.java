@@ -25,6 +25,7 @@ import static org.jenetics.engine.limit.byExecutionTime;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.concurrent.Executors;
 
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
@@ -34,15 +35,36 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 	static int mRotationsNumber;
 	static double mSheetHeight;
 	static NFPImplementation mNFP;
+	static int countExecution = 0;
+	static Integer syncSemaphore = 0;
 	
 	// Calculate the path length of the current genotype.
-	private static PackingResult dist(final int[] permutation) {		
+	private static PackingResult fitness(final int[] permutation) {
+		
+		int localCount = 0;
+		synchronized(JeneticAlgorithm.syncSemaphore) {
+			localCount = JeneticAlgorithm.countExecution;
+			JeneticAlgorithm.countExecution += 1;
+		}	
+		
+		System.out.println(String.format("Starting execution %d", localCount));
+		long start = System.currentTimeMillis();
+		
 		Polygon[] polygonsList = new Polygon[mPolygonsList.length];
 		for (int i=0;i<permutation.length;i++) {
 			polygonsList[i] = mPolygonsList[permutation[i]]; // check limits
 		}
 		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(mNFP);
-		return bottomLeftFill.doPacking(polygonsList, mRotationsNumber, mSheetHeight);
+		PackingResult ret = bottomLeftFill.doPacking(polygonsList, mRotationsNumber, mSheetHeight);
+		long end = System.currentTimeMillis(); 
+		
+		System.err.println("-------------------------");
+		System.out.println(String.format("%d - finalizing execution.", localCount));
+		System.out.println(String.format("%d - with %d", localCount, permutation.length));
+		System.out.println(String.format("%d - time %d", localCount, (int)(end-start)));
+		System.err.println("-------------------------");
+		
+		return ret;
 	}
 
 	private IDataChangeListener[] listeners;
@@ -62,10 +84,12 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		int maxPhenenonAge = (int) (GENERATIONS * 0.2);
 		double swapMutatorFactor = 0.2;
 		double crossoverFactor = 0.35;
+		int steadyFitness = (int) (GENERATIONS * 0.3);
 		
 		boolean hasMaxPhenenonAge = System.getProperty( "maxPhenenonAge" ) != null;
 		boolean hasSwapMutatorFactor = System.getProperty( "swapMutatorFactor" ) != null;
 		boolean hasCrossoverFactor = System.getProperty( "crossoverFactor" ) != null;
+		boolean hasSteadyFitness = System.getProperty( "steadyFitness" ) != null;
 		
 		if (hasMaxPhenenonAge) {
 			maxPhenenonAge = Integer.parseInt(System.getProperty("maxPhenenonAge"));
@@ -80,11 +104,16 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		if (hasCrossoverFactor) {
 			crossoverFactor = Double.parseDouble(System.getProperty("crossoverFactor"));
 			System.out.println("crossoverFactor changed to: " + String.valueOf(crossoverFactor));
-		}		
+		}
+		
+		if (hasSteadyFitness) {
+			steadyFitness = Integer.parseInt(System.getProperty("steadyFitness"));
+			System.out.println("steadyFitness changed to: " + String.valueOf(steadyFitness));
+		}	
 		
 		final Engine<EnumGene<Integer>, PackingResult> engine = Engine
 				.builder(
-						JeneticAlgorithm::dist,
+						JeneticAlgorithm::fitness,
 					codecs.ofPermutation(ITEMS_LEN))
 				.optimize(Optimize.MINIMUM)
 				.maximalPhenotypeAge(maxPhenenonAge)
@@ -92,6 +121,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 				.alterers(
 					new SwapMutator<>(swapMutatorFactor),
 					new PartiallyMatchedCrossover<>(crossoverFactor))
+				.executor(Executors.newFixedThreadPool(8))
 				.build();
 
 			// Create evolution statistics consumer.
@@ -103,7 +133,7 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 						engine.stream()
 						// Truncate the evolution stream after 7 "steady"
 						// generations.
-						.limit(bySteadyFitness(15))
+						.limit(bySteadyFitness(steadyFitness))
 						// The evolution will stop after maximal 100
 						// generations.
 						.limit(byExecutionTime(Duration.ofMillis(time), Clock.systemUTC()))

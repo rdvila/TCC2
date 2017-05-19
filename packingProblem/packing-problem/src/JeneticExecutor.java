@@ -68,6 +68,7 @@ public class JeneticExecutor {
 		}
 		
 		System.out.println(resultTable);
+		System.exit(0);
 	}
 
 }
