@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import de.lighti.clipper.Path;
+import de.lighti.clipper.Paths;
+import de.lighti.clipper.Point.LongPoint;
+
 public class Polygon implements Cloneable {
 
 	private final List<Point> points;
@@ -270,5 +274,37 @@ public class Polygon implements Cloneable {
 	public String color() {
 		return String.format("#%02X%02X%02X", r,g,b);
 	}
+
+	public Paths toPathsClosedFromPolygon() {
+
+		Paths paths = new Paths();
+		Path path = new Path();
+		
+		if (points.size() < 3) {
+			throw new RuntimeException("todos os polígonos devem ter 3 pontos ou mais.");
+		}
+		
+		for (int i=0; i< points.size()-1; i++) {
+			Point p1 = points.get(i);
+			toPath(p1, path);
+		}
+		
+		Point p1_end   = points.get(points.size()-1);
+		toPath(p1_end, path);
+		paths.add(path);
+		
+		return paths;
+	}
+
+	public static final int TO_PATH_SCALE = 1000;
+	private void toPath(Point p1, Path p) {
+		LongPoint lp1 = new LongPoint((new Double(p1.getX()*TO_PATH_SCALE)).longValue(), (new Double(p1.getY()*TO_PATH_SCALE)).longValue());			
+		p.add(lp1);
+	}
+	
+	Polygon toPolygonFromPathsClosed(Paths paths) {
+		return null;
+	}
+	
 
 }
