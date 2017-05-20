@@ -1,16 +1,20 @@
 package br.furb.packing.jenetic;
 
+import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
+import static org.jenetics.engine.limit.byExecutionTime;
+import static org.jenetics.engine.limit.bySteadyFitness;
+
+import java.time.Clock;
+import java.time.Duration;
+import java.util.concurrent.Executors;
+
 import org.jenetics.EnumGene;
 import org.jenetics.Optimize;
 import org.jenetics.PartiallyMatchedCrossover;
 import org.jenetics.Phenotype;
 import org.jenetics.SwapMutator;
 import org.jenetics.engine.Engine;
-import org.jenetics.engine.EvolutionStatistics;
-import org.jenetics.engine.EvolutionStream;
 import org.jenetics.engine.codecs;
-
-import com.oracle.webservices.internal.api.message.PropertySet.Property;
 
 import br.furb.common.Polygon;
 import br.furb.packing.BottomLeftFillAgorithm;
@@ -19,15 +23,6 @@ import br.furb.packing.PackingAlgorithm;
 import br.furb.packing.PackingResult;
 import br.furb.packing.StopCriteria;
 import br.furb.view.ui.IDataChangeListener;
-
-import static org.jenetics.engine.limit.bySteadyFitness;
-import static org.jenetics.engine.limit.byExecutionTime;
-
-import java.time.Clock;
-import java.time.Duration;
-import java.util.concurrent.Executors;
-
-import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class JeneticAlgorithm implements PackingAlgorithm {
 	
@@ -131,18 +126,15 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 			Phenotype<EnumGene<Integer>, PackingResult> best 
 			=
 						engine.stream()
-						// Truncate the evolution stream after 7 "steady"
-						// generations.
+						// Truncate the evolution stream after `steadyFitness` "steady" generations.
 						.limit(bySteadyFitness(steadyFitness))
-						// The evolution will stop after maximal 100
-						// generations.
+						// The evolution will stop after maximal time.
 						.limit(byExecutionTime(Duration.ofMillis(time), Clock.systemUTC()))
+						// The evolution will stop after maximal GENERATIONS generations.
 						.limit(GENERATIONS)
-						// Update the evaluation statistics after
-						// each generation
+						// Update the evaluation statistics after each generation
 						.peek(statistics)
-						// Collect (reduce) the evolution stream to
-						// its best phenotype.
+						// Collect (reduce) the evolution stream to its best phenotype.
 						.collect(toBestPhenotype());
 						
 
