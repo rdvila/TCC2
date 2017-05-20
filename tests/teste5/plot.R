@@ -4,7 +4,7 @@ library(ggplot2)
 
 Sys.setlocale("LC_ALL", "Portuguese")
 
-CairoPNG(filename="all-100-plot.png", width=500, height=250)
+CairoPNG(filename="teste5.png", width=1000, height=500)
 a <- read.csv(file='all-100-all.txt', head=FALSE, sep=",")
 a$V3 <- as.factor(a$V3)
 a$V4 <- as.factor(a$V4)
