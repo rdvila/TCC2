@@ -22,12 +22,10 @@ public class XMLReader implements DatasetReader {
 	private double borderY;
 
 	public double getBorderX() {
-		System.out.println("getBorderX: " + String.valueOf(borderX));
 		return borderX;
 	}
 
 	public double getBorderY() {
-		System.out.println("getBorderY: " + String.valueOf(borderY));
 		return borderY;
 	}
 
@@ -44,10 +42,7 @@ public class XMLReader implements DatasetReader {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(file);
 			doc.getDocumentElement().normalize();
-			System.out.println("Root element "
-					+ doc.getDocumentElement().getNodeName());
 			NodeList nodeLst = doc.getElementsByTagName("polygons");
-			System.out.println("Information of all polygons");
 
 			for (int s = 0; s < nodeLst.getLength(); s++) {
 

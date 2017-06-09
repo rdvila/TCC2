@@ -1,0 +1,17 @@
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor poly3b-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor poly1a-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor poly2b-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor poly4b-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor blaz-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor dagli-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor dighe1-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor dighe2-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor han-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor jakobs1-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor jakobs2-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor marques-converted
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor poly5b-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor shapes0-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor shapes1-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor shirts-converted 
+java -cp "packing.jar;jenetics.jar;cc.jar" MultipleJeneticExecutor trousers-converted

@@ -10,7 +10,8 @@ def frange(x, y, jump):
     x += jump
 
 ns = {'svg': 'http://www.w3.org/2000/svg'}
-inputfile = sys.argv[1];
+inputfile = sys.argv[1]
+factor = sys.argv[2]
 
 tree = ET.parse(inputfile)
 root = tree.getroot()
@@ -36,7 +37,7 @@ for p in paths:
 	new_path = Path()
 	path     = parse_path(p.attrib["d"])
 	start    = None
-	for px in list(frange(0, 1, decimal.Decimal('0.005'))):
+	for px in list(frange(0, 1, decimal.Decimal(factor))):
 		if start is None:
 			start = path.point(float(px))
 		else:
