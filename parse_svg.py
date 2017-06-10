@@ -32,17 +32,30 @@ svgpath1 = '''<path
 svgpath2 = ''' Z"/>
 '''
 
+
 print(SVG1)
 for p in paths:
 	new_path = Path()
 	path     = parse_path(p.attrib["d"])
-	start    = None
-	for px in list(frange(0, 1, decimal.Decimal(factor))):
-		if start is None:
-			start = path.point(float(px))
+	start = None
+	for command in path:
+		if type(command) == Line:
+			new_path.append(command)
+			start = command.end
+			##print(command)
 		else:
-			end   = path.point(float(px))
-			new_path.append(Line(start, end))
-			start = end
-	print(svgpath1 + new_path.d() + svgpath2)
+			not_line_path = Path(command)
+			for px in list(frange(0, 1, decimal.Decimal(factor))):
+				if start is None:
+					start = not_line_path.point(float(px))
+				else:
+					end   = not_line_path.point(float(px))
+					new_command = Line(start, end)
+					new_path.append(new_command)
+					##print(new_command)
+					start = end
+					
+	new_path_str = new_path.d();
+	start = None
+	print(svgpath1 + new_path_str + svgpath2)
 print(SVG2)
