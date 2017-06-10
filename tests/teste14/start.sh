@@ -1,0 +1,1 @@
+java -cp "packing.jar;jenetics.jar;cc.jar" JeneticExecutor alma4 100 1 200 200 1200000

@@ -43,7 +43,6 @@ public class SVGReader implements DatasetReader {
 			borderY = Double.valueOf(elementRoot.getAttribute("height").trim()).doubleValue();			
 			
 			NodeList nodeLst = doc.getElementsByTagName("path");
-			System.out.println("Information of all polygons");
 
 			for (int s = 0; s < nodeLst.getLength(); s++) {
 
@@ -100,13 +99,11 @@ public class SVGReader implements DatasetReader {
 
 	@Override
 	public double getBorderX() {
-		System.out.println("getBorderX: " + String.valueOf(borderX));
 		return borderX;
 	}
 
 	@Override
 	public double getBorderY() {
-		System.out.println("getBorderY: " + String.valueOf(borderY));
 		return borderY;
 	}
 	

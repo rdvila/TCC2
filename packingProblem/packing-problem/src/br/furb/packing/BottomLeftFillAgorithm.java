@@ -1,9 +1,13 @@
 package br.furb.packing;
 
 import java.awt.geom.Line2D;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.map.MultiKeyMap;
 
@@ -11,7 +15,6 @@ import br.furb.common.MathHelper;
 import br.furb.common.Point;
 import br.furb.common.Polygon;
 import br.furb.common.Transform;
-import br.furb.packing.jnfp.NFPCache;
 
 public class BottomLeftFillAgorithm {
 
@@ -29,12 +32,23 @@ public class BottomLeftFillAgorithm {
 
 	private NFPImplementation noFitPolygon;
 	
+	private static boolean USE_CACHE = true;
+	
 	public BottomLeftFillAgorithm(NFPImplementation noFitPolygon) {
 		this.noFitPolygon = noFitPolygon.getnewInstance(); //TODO rever isso
 	}
 	
+	public static ConcurrentHashMap<String, PackingResult> cache = new ConcurrentHashMap<>();	
 	public PackingResult doPacking(Polygon[] polygonsList, int rotationsNumber,
 			double sheetHeight) {
+		
+		String key = "";
+		if (USE_CACHE) {
+			key = tokey(polygonsList, rotationsNumber, sheetHeight);
+			if (isOnCache(key)) {
+				return getValueFromCache(key);
+			}
+		}
 		
 		resolution = sheetHeight * 0.01;
 
@@ -91,8 +105,58 @@ public class BottomLeftFillAgorithm {
 			sheetShapeIndex++;
 		}
 		
-		return new PackingResult(sheetShapes, maxHeight);
+		PackingResult result = new PackingResult(sheetShapes, maxHeight);
+		if (USE_CACHE) {
+			addTocache(key, result);
+		}
+		return result;
+		
 		// Return Evaluation (total length of packing);
+	}
+
+	private void addTocache(String key, PackingResult result) {
+		cache.put(key, result);		
+		if (cache.size() > 200000) {
+			dumpCache(cache);
+			cache = new ConcurrentHashMap<>();
+		}		
+	}
+
+	private void dumpCache(ConcurrentHashMap<String, PackingResult> cache) {		
+		try{
+			 UUID uuid = UUID.randomUUID();
+		     String randomUUIDString = uuid.toString();
+		    PrintWriter writer = new PrintWriter(PackingResult.dataset + "-" + randomUUIDString +".txt", "UTF-8");
+		    for (String key : cache.keySet()) {
+		    	PackingResult result = cache.get(key);
+		    	writer.println(key + ',' + result.getHeight() + ',' + result.count);
+		    }
+		    writer.close();
+		} catch (IOException e) {
+		   e.printStackTrace();
+		}
+	}
+
+	private PackingResult getValueFromCache(String key) {
+		PackingResult value = cache.get(key);
+		value.count += 1;
+		return value;
+	}
+
+	private boolean isOnCache(String key) {
+		return cache.containsKey(key);
+	}
+
+	private String tokey(Polygon[] polygonsList, int rotationsNumber, double sheetHeight) {
+		StringBuilder builder = new StringBuilder();
+		for (Polygon p: polygonsList) {
+			builder.append(p.getId());
+			builder.append("-");
+		}
+		builder.append(rotationsNumber);
+		builder.append("-");
+		builder.append(sheetHeight);
+		return builder.toString();
 	}
 
 	private boolean compareBestOrientation(Polygon currentBestpolygon,

@@ -5,6 +5,8 @@ import br.furb.common.Polygon;
 
 public class PackingResult implements Comparable<PackingResult> {
 	private final Polygon[] packing;
+	public  int count = 0;
+	public static String dataset = "unknown";
 
 	private final double height;
 

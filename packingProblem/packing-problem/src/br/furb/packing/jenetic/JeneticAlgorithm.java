@@ -42,7 +42,6 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 			JeneticAlgorithm.countExecution += 1;
 		}	
 		
-		System.out.println(String.format("Starting execution %d", localCount));
 		long start = System.currentTimeMillis();
 		
 		Polygon[] polygonsList = new Polygon[mPolygonsList.length];
@@ -52,12 +51,6 @@ public class JeneticAlgorithm implements PackingAlgorithm {
 		BottomLeftFillAgorithm bottomLeftFill = new BottomLeftFillAgorithm(mNFP);
 		PackingResult ret = bottomLeftFill.doPacking(polygonsList, mRotationsNumber, mSheetHeight);
 		long end = System.currentTimeMillis(); 
-		
-		System.err.println("-------------------------");
-		System.out.println(String.format("%d - finalizing execution.", localCount));
-		System.out.println(String.format("%d - with %d", localCount, permutation.length));
-		System.out.println(String.format("%d - time %d", localCount, (int)(end-start)));
-		System.err.println("-------------------------");
 		
 		return ret;
 	}

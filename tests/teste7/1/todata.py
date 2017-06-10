@@ -1,6 +1,6 @@
 import csv
 
-datasets = ['fu-converted', 'poly1a-converted', 'poly2b-converted', 'poly3b-converted', 'poly3b-converted']
+datasets = ['fu-converted', 'poly1a-converted', 'poly2b-converted', 'poly3b-converted', 'poly4b-converted']
 genetics = ['-100-1-999999-50-', '-100-1-999999-100-', '-100-1-999999-200-']
 hill = ['-hill-100-1-']
 tabu = ['-tabu-100-1-']
